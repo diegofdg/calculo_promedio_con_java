@@ -9,23 +9,32 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 
-public class VentanaOperaciones extends JFrame {
+public class VentanaOperaciones extends JFrame implements ActionListener {
 
 	private JPanel panelPrincipal;
 	private JTextField txtNombre;
 	private JTextField txtNota1;
 	private JTextField txtNota2;
 	private JTextField txtNota3;
+	private JButton btnCalcular;
+	private JLabel lblResPromedio;
+	private JLabel lblResultado;
 
 	public VentanaOperaciones() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setBounds(100, 100, 625, 372);
 		setSize(491, 382);
 		setLocationRelativeTo(null);
+		setResizable(false);
 		setTitle("CALCULO DE PROMEDIO");
 		iniciarComponentes();
 		
@@ -95,19 +104,55 @@ public class VentanaOperaciones extends JFrame {
 		lblPromedio.setBounds(31, 245, 127, 31);
 		panelPrincipal.add(lblPromedio);
 		
-		JLabel lblResPromedio = new JLabel("");
+		lblResPromedio = new JLabel("");
 		lblResPromedio.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lblResPromedio.setBounds(262, 245, 278, 33);
+		lblResPromedio.setBounds(156, 245, 271, 31);
 		panelPrincipal.add(lblResPromedio);
 		
-		JLabel lblResultado = new JLabel("Resultado:");
+		lblResultado = new JLabel("Resultado:");
 		lblResultado.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lblResultado.setBounds(31, 287, 136, 33);
+		lblResultado.setBounds(31, 286, 396, 31);
 		panelPrincipal.add(lblResultado);
 		
-		JButton btnCalcular = new JButton("Calcular");
+		btnCalcular = new JButton("Calcular");
 		btnCalcular.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnCalcular.setBounds(291, 197, 136, 33);
+		btnCalcular.setBounds(310, 190, 117, 31);
+		btnCalcular.addActionListener(this);
 		panelPrincipal.add(btnCalcular);
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		if(e.getSource() == btnCalcular) {			
+			calcularPromedio();
+		}		
+	}
+
+	private void calcularPromedio() {
+		String nombreString = txtNombre.getText();
+		
+		try {
+			double n1 = Double.parseDouble(txtNota1.getText());
+			double n2 = Double.parseDouble(txtNota2.getText());
+			double n3 = Double.parseDouble(txtNota3.getText());
+			
+			double promedio = (n1+n2+n3)/3;
+			
+			lblResPromedio.setText(promedio+"");
+			
+			if(promedio >= 3.5) {
+				lblResultado.setText("Resultado: Aprobado");
+				lblResultado.setForeground(Color.GREEN);
+			} else {
+				lblResultado.setText("Resultado: No Aprobado");
+				lblResultado.setForeground(Color.RED);
+			}			
+		} catch (NumberFormatException e) {
+			JOptionPane.showMessageDialog(null, "Error de ingreso de texto", "ERROR", JOptionPane.ERROR_MESSAGE);
+		} catch (Exception e) {
+		JOptionPane.showMessageDialog(null, "Ocurre un error, verifique los datos", "ERROR", JOptionPane.ERROR_MESSAGE);
+	}
+		
+				
 	}
 }
