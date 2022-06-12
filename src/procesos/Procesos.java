@@ -1,8 +1,15 @@
 package procesos;
 
-import java.awt.Color;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Procesos {
+	
+	ArrayList<Persona> listaPersonas;
+	
+	public Procesos() {
+		listaPersonas = new ArrayList<Persona>();
+	}
 	public double calcularPromedio(double n1, double n2, double n3) {
 		double promedio = (n1+n2+n3)/3;
 		return promedio;		
@@ -12,12 +19,26 @@ public class Procesos {
 		
 		if(promedio >= 3.5) {
 			return "Aprobado";
-			//lblResultado.setText();
-			//lblResultado.setForeground(Color.GREEN);
 		} else {
 			return "No Aprobado";
-			//lblResultado.setText("Resultado: No Aprobado");
-			//lblResultado.setForeground(Color.RED);
 		}
+	}
+
+	public double calcularPromedio(Persona estudiante) {
+		double promedio = (estudiante.getNota1() + estudiante.getNota2() + estudiante.getNota3()) / 3;
+		return promedio;
+	}
+
+	public void registrarEnBD(Persona estudiante) {
+		System.out.println("Se registra en la BD");
+		//System.out.println(estudiante);
+		listaPersonas.add(estudiante);
+		
+	}
+	public void imprimirListaEstudiantes() {
+		for(Persona persona : listaPersonas) {
+			System.out.println(persona);
+		}
+		
 	}
 }

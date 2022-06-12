@@ -8,6 +8,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import procesos.Persona;
 import procesos.Procesos;
 
 import javax.swing.JButton;
@@ -32,13 +33,14 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 	private JLabel lblResPromedio;
 	private JLabel lblResultado;
 	Procesos misProcesos;
+	private JButton btnImprimirTotal;
 	
 
 	public VentanaOperaciones() {
 		misProcesos = new Procesos();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setBounds(100, 100, 625, 372);
-		setSize(491, 382);
+		setSize(491, 457);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setTitle("CALCULO DE PROMEDIO");
@@ -125,27 +127,38 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 		btnCalcular.setBounds(310, 190, 117, 31);
 		btnCalcular.addActionListener(this);
 		panelPrincipal.add(btnCalcular);
+		
+		btnImprimirTotal = new JButton("Calcular");
+		btnImprimirTotal.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnImprimirTotal.setBounds(28, 365, 399, 31);
+		btnImprimirTotal.addActionListener(this);
+		panelPrincipal.add(btnImprimirTotal);
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnCalcular) {			
 			calcularPromedio();
-		}		
+		} else if(e.getSource() == btnImprimirTotal) {			
+			misProcesos.imprimirListaEstudiantes();
+		}
 	}
 
 	private void calcularPromedio() {
-		String nombreString = txtNombre.getText();
+		Persona estudiante = new Persona();
+		estudiante.setNombre(txtNombre.getText());
 		
 		try {
-			double n1 = Double.parseDouble(txtNota1.getText());
-			double n2 = Double.parseDouble(txtNota2.getText());
-			double n3 = Double.parseDouble(txtNota3.getText());			
-			double promedio = misProcesos.calcularPromedio(n1, n2, n3);	
+			estudiante.setNota1(Double.parseDouble(txtNota1.getText()));
+			estudiante.setNota2(Double.parseDouble(txtNota2.getText()));
+			estudiante.setNota3(Double.parseDouble(txtNota3.getText()));			
+			estudiante.setPromedio(misProcesos.calcularPromedio(estudiante));
 			
-			lblResPromedio.setText(promedio+"");
+			lblResPromedio.setText(estudiante.getPromedio()+" ");
 			
-			String resultado = misProcesos.calcularDefinitiva(promedio);
+			String resultado = misProcesos.calcularDefinitiva(estudiante.getPromedio());
+			
+			misProcesos.registrarEnBD(estudiante);
 			
 			if(resultado.equals("Aprobado")) {
 				lblResultado.setText("Resultado: "+resultado);
