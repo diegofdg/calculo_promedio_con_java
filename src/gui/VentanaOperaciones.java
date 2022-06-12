@@ -7,6 +7,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import procesos.Procesos;
+
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -28,8 +31,11 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 	private JButton btnCalcular;
 	private JLabel lblResPromedio;
 	private JLabel lblResultado;
+	Procesos misProcesos;
+	
 
 	public VentanaOperaciones() {
+		misProcesos = new Procesos();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//setBounds(100, 100, 625, 372);
 		setSize(491, 382);
@@ -134,19 +140,21 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 		try {
 			double n1 = Double.parseDouble(txtNota1.getText());
 			double n2 = Double.parseDouble(txtNota2.getText());
-			double n3 = Double.parseDouble(txtNota3.getText());
-			
-			double promedio = (n1+n2+n3)/3;
+			double n3 = Double.parseDouble(txtNota3.getText());			
+			double promedio = misProcesos.calcularPromedio(n1, n2, n3);	
 			
 			lblResPromedio.setText(promedio+"");
 			
-			if(promedio >= 3.5) {
-				lblResultado.setText("Resultado: Aprobado");
-				lblResultado.setForeground(Color.GREEN);
+			String resultado = misProcesos.calcularDefinitiva(promedio);
+			
+			if(resultado.equals("Aprobado")) {
+				lblResultado.setText("Resultado: "+resultado);
+				lblResultado.setForeground(Color.GREEN);				
 			} else {
-				lblResultado.setText("Resultado: No Aprobado");
+				lblResultado.setText("Resultado: "+resultado);
 				lblResultado.setForeground(Color.RED);
 			}			
+					
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(null, "Error de ingreso de texto", "ERROR", JOptionPane.ERROR_MESSAGE);
 		} catch (Exception e) {
