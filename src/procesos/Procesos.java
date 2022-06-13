@@ -49,7 +49,6 @@ public class Procesos {
 		for(Persona persona : listaPersonas) {
 			if(persona.getDocumento().equals(documento)) {
 				p = persona;
-				//System.out.println(persona);
 			}	
 		}
 		return p;

@@ -11,6 +11,7 @@ import javax.swing.border.EmptyBorder;
 import procesos.Persona;
 import procesos.Procesos;
 
+import javax.swing.AbstractButton;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -37,6 +38,7 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 	private JLabel lblDoc;
 	private JTextField txtDocumento;
 	private JButton btnConsultarEstudiante;
+	private AbstractButton btnConsultarLista;
 	
 
 	public VentanaOperaciones() {
@@ -152,6 +154,13 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 		btnConsultarEstudiante.setBounds(327, 365, 100, 31);
 		btnConsultarEstudiante.addActionListener(this);
 		panelPrincipal.add(btnConsultarEstudiante);
+		
+		btnConsultarLista = new JButton();
+		btnConsultarLista.setText("Consulta Total");
+		btnConsultarLista.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnConsultarLista.setBounds(181, 365, 136, 31);
+		btnConsultarLista.addActionListener(this);
+		panelPrincipal.add(btnConsultarLista);
 	}
 
 	@Override
@@ -170,6 +179,12 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 			VentanaConsulta miVentanaConsulta = new VentanaConsulta();
 			miVentanaConsulta.asignarProcesos(misProcesos);
 			miVentanaConsulta.setVisible(true);
+			
+		} else if (e.getSource()==btnConsultarLista) {
+			VentanaConsultaPersonas miVentanaConsultaPersonas = new VentanaConsultaPersonas();
+			miVentanaConsultaPersonas.setProcesos(misProcesos);
+			miVentanaConsultaPersonas.llenarTabla();
+			miVentanaConsultaPersonas.setVisible(true);			
 		}
 	}
 
