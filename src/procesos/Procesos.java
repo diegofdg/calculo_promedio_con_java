@@ -31,7 +31,6 @@ public class Procesos {
 
 	public void registrarEnBD(Persona estudiante) {
 		System.out.println("Se registra en la BD");
-		//System.out.println(estudiante);
 		listaPersonas.add(estudiante);
 		
 	}
@@ -40,5 +39,15 @@ public class Procesos {
 			System.out.println(persona);
 		}
 		
+	}
+	public Persona obtenerEstudiante(String documento) {
+		Persona p = null;
+		for(Persona persona : listaPersonas) {
+			if(persona.getDocumento().equals(documento)) {
+				p = persona;
+				//System.out.println(persona);
+			}	
+		}
+		return p;
 	}
 }

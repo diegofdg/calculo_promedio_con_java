@@ -1,11 +1,20 @@
 package procesos;
 
 public class Persona {
+	private String documento;
 	private String nombre;
 	private double nota1;
 	private double nota2;
 	private double nota3;
 	private double promedio;
+	
+	public String getDocumento() {
+		return documento;
+	}
+
+	public void setDocumento(String documento) {
+		this.documento = documento;
+	}
 	
 	public String getNombre() {
 		return nombre;
@@ -51,7 +60,5 @@ public class Persona {
 	public String toString() {
 		return "Persona [nombre=" + nombre + ", nota1=" + nota1 + ", nota2=" + nota2 + ", nota3=" + nota3
 				+ ", promedio=" + promedio + "]";
-	}
-	
-	
+	}	
 }

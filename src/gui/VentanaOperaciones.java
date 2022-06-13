@@ -32,15 +32,17 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 	private JButton btnCalcular;
 	private JLabel lblResPromedio;
 	private JLabel lblResultado;
-	Procesos misProcesos;
+	Procesos misProcesos;	
 	private JButton btnImprimirTotal;
+	private JLabel lblDoc;
+	private JTextField txtDocumento;
+	private JButton btnConsultarEstudiante;
 	
 
 	public VentanaOperaciones() {
 		misProcesos = new Procesos();
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		//setBounds(100, 100, 625, 372);
-		setSize(491, 457);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
+		setSize(486, 531);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setTitle("CALCULO DE PROMEDIO");
@@ -69,7 +71,7 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 		panelPrincipal.add(lblNombre);
 		
 		txtNombre = new JTextField();
-		txtNombre.setBounds(95, 80, 332, 39);
+		txtNombre.setBounds(95, 80, 200, 39);
 		txtNombre.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		panelPrincipal.add(txtNombre);
 		txtNombre.setColumns(10);
@@ -128,11 +130,28 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 		btnCalcular.addActionListener(this);
 		panelPrincipal.add(btnCalcular);
 		
-		btnImprimirTotal = new JButton("Calcular");
+		btnImprimirTotal = new JButton("Imprimir total");
 		btnImprimirTotal.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		btnImprimirTotal.setBounds(28, 365, 399, 31);
+		btnImprimirTotal.setBounds(28, 365, 136, 31);
 		btnImprimirTotal.addActionListener(this);
 		panelPrincipal.add(btnImprimirTotal);
+		
+		lblDoc = new JLabel("Doc:");
+		lblDoc.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblDoc.setBounds(312, 86, 42, 23);
+		panelPrincipal.add(lblDoc);
+		
+		txtDocumento = new JTextField();
+		txtDocumento.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		txtDocumento.setColumns(10);
+		txtDocumento.setBounds(364, 78, 63, 39);
+		panelPrincipal.add(txtDocumento);
+		
+		btnConsultarEstudiante = new JButton("Consultar");
+		btnConsultarEstudiante.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnConsultarEstudiante.setBounds(327, 365, 100, 31);
+		btnConsultarEstudiante.addActionListener(this);
+		panelPrincipal.add(btnConsultarEstudiante);
 	}
 
 	@Override
@@ -141,12 +160,17 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 			calcularPromedio();
 		} else if(e.getSource() == btnImprimirTotal) {			
 			misProcesos.imprimirListaEstudiantes();
+		} else if(e.getSource() == btnConsultarEstudiante) {
+			VentanaConsulta miVentanaConsulta = new VentanaConsulta();
+			miVentanaConsulta.asignarProcesos(misProcesos);
+			miVentanaConsulta.setVisible(true);
 		}
 	}
 
 	private void calcularPromedio() {
 		Persona estudiante = new Persona();
 		estudiante.setNombre(txtNombre.getText());
+		estudiante.setDocumento(txtDocumento.getText());
 		
 		try {
 			estudiante.setNota1(Double.parseDouble(txtNota1.getText()));
@@ -172,8 +196,6 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(null, "Error de ingreso de texto", "ERROR", JOptionPane.ERROR_MESSAGE);
 		} catch (Exception e) {
 		JOptionPane.showMessageDialog(null, "Ocurre un error, verifique los datos", "ERROR", JOptionPane.ERROR_MESSAGE);
-	}
-		
-				
+		}				
 	}
 }
