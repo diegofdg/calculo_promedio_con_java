@@ -131,7 +131,7 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 		panelPrincipal.add(btnCalcular);
 		
 		btnImprimirTotal = new JButton("Imprimir total");
-		btnImprimirTotal.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnImprimirTotal.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnImprimirTotal.setBounds(28, 365, 136, 31);
 		btnImprimirTotal.addActionListener(this);
 		panelPrincipal.add(btnImprimirTotal);
@@ -148,7 +148,7 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 		panelPrincipal.add(txtDocumento);
 		
 		btnConsultarEstudiante = new JButton("Consultar");
-		btnConsultarEstudiante.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnConsultarEstudiante.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnConsultarEstudiante.setBounds(327, 365, 100, 31);
 		btnConsultarEstudiante.addActionListener(this);
 		panelPrincipal.add(btnConsultarEstudiante);
@@ -158,8 +158,14 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnCalcular) {			
 			calcularPromedio();
+			
 		} else if(e.getSource() == btnImprimirTotal) {			
 			misProcesos.imprimirListaEstudiantes();
+			VentanaConsultaGeneral miConsultaGeneral = new VentanaConsultaGeneral();
+			miConsultaGeneral.setProcesos(misProcesos);
+			miConsultaGeneral.mostrarListaEnArea();
+			miConsultaGeneral.setVisible(true);
+			
 		} else if(e.getSource() == btnConsultarEstudiante) {
 			VentanaConsulta miVentanaConsulta = new VentanaConsulta();
 			miVentanaConsulta.asignarProcesos(misProcesos);
@@ -194,8 +200,9 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 					
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(null, "Error de ingreso de texto", "ERROR", JOptionPane.ERROR_MESSAGE);
+			
 		} catch (Exception e) {
-		JOptionPane.showMessageDialog(null, "Ocurre un error, verifique los datos", "ERROR", JOptionPane.ERROR_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Ocurre un error, verifique los datos", "ERROR", JOptionPane.ERROR_MESSAGE);
 		}				
 	}
 }

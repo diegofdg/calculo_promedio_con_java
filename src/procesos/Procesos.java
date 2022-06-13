@@ -37,9 +37,13 @@ public class Procesos {
 	public void imprimirListaEstudiantes() {
 		for(Persona persona : listaPersonas) {
 			System.out.println(persona);
-		}
-		
+		}		
 	}
+	
+	public ArrayList<Persona> getLista() {
+		return listaPersonas;		
+	}
+	
 	public Persona obtenerEstudiante(String documento) {
 		Persona p = null;
 		for(Persona persona : listaPersonas) {
