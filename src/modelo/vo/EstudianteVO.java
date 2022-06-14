@@ -1,6 +1,6 @@
-package modelo.operaciones;
+package modelo.vo;
 
-public class Persona {
+public class EstudianteVO {
 	private String documento;
 	private String nombre;
 	private double nota1;

@@ -15,7 +15,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import controlador.Coordinador;
-import modelo.operaciones.Persona;
+import modelo.vo.EstudianteVO;
 
 public class VentanaConsulta extends JFrame implements ActionListener {
 	
@@ -30,9 +30,12 @@ public class VentanaConsulta extends JFrame implements ActionListener {
 	private JLabel lblDoc;
 	private JTextField txtDocumento;
 	private Coordinador miCoordinador;
+	private JButton btnActualizar;
+	private JButton btnEliminar;
+	private JLabel lblResActualizacion;
 	
 	public VentanaConsulta() {
-		setSize(477, 379);
+		setSize(491, 426);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setTitle("CALCULO DE PROMEDIO");
@@ -100,51 +103,124 @@ public class VentanaConsulta extends JFrame implements ActionListener {
 		
 		JLabel lblPromedio = new JLabel("Promedio:");
 		lblPromedio.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lblPromedio.setBounds(31, 208, 127, 31);
+		lblPromedio.setBounds(31, 209, 127, 31);
 		panelPrincipal.add(lblPromedio);
 		
 		lblResPromedio = new JLabel("");
 		lblResPromedio.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lblResPromedio.setBounds(156, 208, 271, 31);
+		lblResPromedio.setBounds(156, 209, 271, 31);
 		panelPrincipal.add(lblResPromedio);
 		
 		lblResultado = new JLabel("Resultado:");
 		lblResultado.setFont(new Font("Tahoma", Font.PLAIN, 25));
-		lblResultado.setBounds(31, 249, 396, 31);
+		lblResultado.setBounds(31, 250, 396, 31);
 		panelPrincipal.add(lblResultado);
 		
 		btnConsultar = new JButton("Consultar");
 		btnConsultar.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnConsultar.setBounds(310, 202, 117, 31);
+		btnConsultar.setBounds(333, 60, 94, 31);
 		btnConsultar.addActionListener(this);
 		panelPrincipal.add(btnConsultar);
 		
 		lblDoc = new JLabel("Documento:");
 		lblDoc.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		lblDoc.setBounds(259, 65, 100, 23);
+		lblDoc.setBounds(175, 65, 100, 23);
 		panelPrincipal.add(lblDoc);
 		
 		txtDocumento = new JTextField();
 		txtDocumento.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		txtDocumento.setColumns(10);
-		txtDocumento.setBounds(364, 60, 63, 39);
-		panelPrincipal.add(txtDocumento);		
+		txtDocumento.setBounds(260, 60, 63, 31);
+		panelPrincipal.add(txtDocumento);
+		
+		btnActualizar = new JButton();
+		btnActualizar.setText("Actualizar");
+		btnActualizar.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnActualizar.setBounds(31, 298, 184, 31);
+		btnActualizar.addActionListener(this);
+		panelPrincipal.add(btnActualizar);
+		
+		btnEliminar = new JButton();
+		btnEliminar.setText("Eliminar");
+		btnEliminar.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnEliminar.setBounds(243, 298, 184, 31);
+		btnEliminar.addActionListener(this);
+		panelPrincipal.add(btnEliminar);
+		
+		lblResActualizacion = new JLabel("");
+		lblResActualizacion.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		lblResActualizacion.setBounds(31, 345, 396, 31);
+		panelPrincipal.add(lblResActualizacion);
 		
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(e.getSource() == btnConsultar) {			
-			Persona miEstudiante = miCoordinador.obtenerEstudiante(txtDocumento.getText());
+		if(e.getSource() == btnConsultar) {		
+			EstudianteVO miEstudiante = miCoordinador.obtenerEstudiante(txtDocumento.getText());
+			lblResActualizacion.setText("");
+			
 			if(miEstudiante != null) {
 				txtNombre.setText(miEstudiante.getNombre());
 				txtNota1.setText(miEstudiante.getNota1()+"");
 				txtNota2.setText(miEstudiante.getNota2()+"");
-				txtNota3.setText(miEstudiante.getNota3()+"");				
+				txtNota3.setText(miEstudiante.getNota3()+"");
+				lblResPromedio.setText(miEstudiante.getPromedio()+"");
+				
+				if(miEstudiante.getPromedio() >= 3.5) {
+					lblResultado.setText("Resultado: Aprobado");					
+					lblResultado.setForeground(Color.GREEN);
+				} else {
+					lblResultado.setText("Resultado: No Aprobado");					
+					lblResultado.setForeground(Color.RED);
+				}
+				
 			} else {
-				JOptionPane.showMessageDialog(null, "No existe una persona con ese documento");
+				JOptionPane.showMessageDialog(null, "El estudiante no existe");
 			}
-		}		
+			
+		} else if (e.getSource()==btnActualizar) {
+			EstudianteVO miEstudiante = new EstudianteVO();
+			
+			miEstudiante.setDocumento(txtDocumento.getText());
+			miEstudiante.setNombre(txtNombre.getText());
+			miEstudiante.setNota1(Double.parseDouble(txtNota1.getText()));
+			miEstudiante.setNota2(Double.parseDouble(txtNota2.getText()));
+			miEstudiante.setNota3(Double.parseDouble(txtNota3.getText()));
+			miEstudiante.setPromedio(miCoordinador.calcularPromedio(miEstudiante));
+			
+			String resultado = miCoordinador.actualizarEstudiante(miEstudiante);
+			
+			if (resultado.equals("ok")) {
+				lblResActualizacion.setText("Se ha actualizado correctamente");
+				lblResPromedio.setText(miEstudiante.getPromedio()+"");
+				lblResultado.setText("");
+			} else {
+				lblResActualizacion.setText("No se pudo actualizar");
+			}
+			
+		} else if (e.getSource() == btnEliminar) { 
+			String documento = txtDocumento.getText();
+			String resultado = miCoordinador.eliminarEstudiante(documento);
+			
+			if (resultado.equals("ok")) {
+				limpiarCampos();
+				lblResActualizacion.setText("Se ha eliminado correctamente");
+			} else {
+				lblResActualizacion.setText("No se pudo eliminar");
+			}
+		}
+	}
+	
+	public void limpiarCampos() {
+		txtDocumento.setText("");
+		txtNombre.setText("");
+		txtNota1.setText("");
+		txtNota2.setText("");
+		txtNota3.setText("");
+		lblResPromedio.setText("");
+		lblResultado.setText("");
+		lblResActualizacion.setText("");
 	}
 
 	public void setCoordinador(Coordinador miCoordinador) {

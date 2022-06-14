@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import controlador.Coordinador;
-import modelo.operaciones.Persona;
+import modelo.vo.EstudianteVO;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -176,7 +176,7 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 	}
 
 	private void calcularPromedio() {
-		Persona estudiante = new Persona();
+		EstudianteVO estudiante = new EstudianteVO();
 		estudiante.setNombre(txtNombre.getText());
 		estudiante.setDocumento(txtDocumento.getText());
 		
@@ -190,15 +190,20 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 			
 			String resultado = miCoordinador.calcularDefinitiva(estudiante.getPromedio());
 			
-			miCoordinador.registrarEnBD(estudiante);
+			String respuesta = miCoordinador.registrarEnBD(estudiante);
 			
-			if(resultado.equals("Aprobado")) {
-				lblResultado.setText("Resultado: "+resultado);
-				lblResultado.setForeground(Color.GREEN);				
+			if(respuesta.equals("ok")) {
+				if(resultado.equals("Aprobado")) {
+					lblResultado.setText("Resultado: "+resultado);
+					lblResultado.setForeground(Color.GREEN);				
+				} else {
+					lblResultado.setText("Resultado: "+resultado);
+					lblResultado.setForeground(Color.RED);
+				}				
 			} else {
-				lblResultado.setText("Resultado: "+resultado);
-				lblResultado.setForeground(Color.RED);
+				JOptionPane.showMessageDialog(null, "No se pudo registrar", "Advertencia", JOptionPane.WARNING_MESSAGE);				
 			}			
+						
 					
 		} catch (NumberFormatException e) {
 			JOptionPane.showMessageDialog(null, "Error de ingreso de texto", "ERROR", JOptionPane.ERROR_MESSAGE);

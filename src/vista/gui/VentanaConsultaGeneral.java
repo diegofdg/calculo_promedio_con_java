@@ -14,7 +14,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import controlador.Coordinador;
-import modelo.operaciones.Persona;
+import modelo.vo.EstudianteVO;
 
 public class VentanaConsultaGeneral extends JFrame {
 
@@ -58,11 +58,11 @@ public class VentanaConsultaGeneral extends JFrame {
 	}
 
 	public void mostrarListaEnArea() {
-		ArrayList<Persona> listaPersonas = miCoordinador.getLista();
+		ArrayList<EstudianteVO> listaPersonas = miCoordinador.getLista();
 		String cadena = "INFORMACION PERSONAS\n";
 		
 		if(!listaPersonas.isEmpty()) {
-			for(Persona persona : listaPersonas) {
+			for(EstudianteVO persona : listaPersonas) {
 				cadena += "Documento: "+persona.getDocumento()+"\n";
 				cadena += "Nombre: "+persona.getNombre()+"\n";
 				cadena += "Nota 1: "+persona.getNota1()+"Nota 2: "+persona.getNota2()+"Nota 3: "+persona.getNota3()+"\n";

@@ -1,11 +1,14 @@
 package controlador;
 
+import java.awt.HeadlessException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.swing.JOptionPane;
 
-import modelo.operaciones.Persona;
+import modelo.dao.EstudianteDAO;
 import modelo.operaciones.Procesos;
+import modelo.vo.EstudianteVO;
 import vista.gui.VentanaConsulta;
 import vista.gui.VentanaConsultaGeneral;
 import vista.gui.VentanaConsultaPersonas;
@@ -16,7 +19,8 @@ public class Coordinador {
 	private VentanaConsulta ventanaConsulta;
 	private VentanaConsultaGeneral ventanaConsultaGeneral;
 	private VentanaConsultaPersonas ventanaConsultaPersonas;
-	private Procesos misProcesos;	
+	private Procesos misProcesos;
+	private EstudianteDAO miEstudianteDAO;
 
 	public void setVentanaOperaciones(VentanaOperaciones ventanaOperaciones) {
 		this.ventanaOperaciones = ventanaOperaciones;		
@@ -37,13 +41,16 @@ public class Coordinador {
 	public void setProcesos(Procesos misProcesos) {
 		this.misProcesos = misProcesos;		
 	}
-
-	public void mostrarVentanaPrincipal() {
-		ventanaOperaciones.setVisible(true);
-		
+	
+	public void setEstudianteDAO(EstudianteDAO miEstudianteDAO) {
+		this.miEstudianteDAO = miEstudianteDAO;
 	}
 
-	public double calcularPromedio(Persona estudiante) {
+	public void mostrarVentanaPrincipal() {
+		ventanaOperaciones.setVisible(true);		
+	}
+
+	public double calcularPromedio(EstudianteVO estudiante) {
 		return misProcesos.calcularPromedio(estudiante);		
 	}
 
@@ -51,24 +58,42 @@ public class Coordinador {
 		return misProcesos.calcularDefinitiva(promedio);
 	}
 
-	public void registrarEnBD(Persona estudiante) {
-		misProcesos.registrarEnBD(estudiante);		
+	public String registrarEnBD(EstudianteVO estudiante) {
+		//misProcesos.registrarEnBD(estudiante);
+		try {
+			return miEstudianteDAO.registrarEstudiante(estudiante);
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			return "error";
+		}
 	}
 
 	public void mostrarVentanaConsultaPersonas() {
-		if(misProcesos.getLista().isEmpty()) {
-			JOptionPane.showMessageDialog(null, "No hay información en la lista");
-		} else {
-			ventanaConsultaPersonas.llenarTabla();
-			ventanaConsultaPersonas.setVisible(true);			
+		try {			
+			if(miEstudianteDAO.consultarListaEstudiantes().isEmpty()) {
+				JOptionPane.showMessageDialog(null, "No hay información en la lista");
+			} else {
+				ventanaConsultaPersonas.llenarTabla();
+				ventanaConsultaPersonas.setVisible(true);			
+			}
+		} catch (HeadlessException e) {			
+			e.printStackTrace();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}		
 	}
 
-	public ArrayList<Persona> getLista() {
-		return misProcesos.getLista();
+	public ArrayList<EstudianteVO> getLista() {
+		try {
+			return miEstudianteDAO.consultarListaEstudiantes();
+		} catch (SQLException e) {		
+			e.printStackTrace();
+			return new ArrayList<EstudianteVO>();
+		}
 	}
 
 	public void mostrarVentanaConsulta() {
+		ventanaConsulta.limpiarCampos();
 		ventanaConsulta.setVisible(true);		
 	}
 
@@ -77,7 +102,30 @@ public class Coordinador {
 		ventanaConsultaGeneral.setVisible(true);		
 	}
 
-	public Persona obtenerEstudiante(String documento) {
-		return misProcesos.obtenerEstudiante(documento);
+	public EstudianteVO obtenerEstudiante(String documento) {
+		try {
+			return miEstudianteDAO.consultarEstudiante(documento);
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			return null;
+		}		
+	}
+	
+	public String actualizarEstudiante(EstudianteVO miEstudiante)  {
+		try {
+			return miEstudianteDAO.actualizaEstudiante(miEstudiante);
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			return "error"; 
+		}
+	}
+
+	public String eliminarEstudiante(String documento)  {
+		try {
+			return miEstudianteDAO.eliminarEstudiante(documento);
+		} catch (SQLException e) {
+			//e.printStackTrace();
+			return "error"; 
+		}
 	}
 }

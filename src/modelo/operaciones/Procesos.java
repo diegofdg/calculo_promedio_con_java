@@ -3,14 +3,15 @@ package modelo.operaciones;
 import java.util.ArrayList;
 
 import controlador.Coordinador;
+import modelo.vo.EstudianteVO;
 
 public class Procesos {
 	
-	ArrayList<Persona> listaPersonas;
+	ArrayList<EstudianteVO> listaPersonas;
 	private Coordinador miCoordinador;
 	
 	public Procesos() {
-		listaPersonas = new ArrayList<Persona>();
+		listaPersonas = new ArrayList<EstudianteVO>();
 	}
 	public double calcularPromedio(double n1, double n2, double n3) {
 		double promedio = (n1+n2+n3)/3;
@@ -26,29 +27,29 @@ public class Procesos {
 		}
 	}
 
-	public double calcularPromedio(Persona estudiante) {
+	public double calcularPromedio(EstudianteVO estudiante) {
 		double promedio = (estudiante.getNota1() + estudiante.getNota2() + estudiante.getNota3()) / 3;
 		return promedio;
 	}
 
-	public void registrarEnBD(Persona estudiante) {
+	public void registrarEnBD(EstudianteVO estudiante) {
 		System.out.println("Se registra en la BD");
 		listaPersonas.add(estudiante);
 		
 	}
 	public void imprimirListaEstudiantes() {
-		for(Persona persona : listaPersonas) {
+		for(EstudianteVO persona : listaPersonas) {
 			System.out.println(persona);
 		}		
 	}
 	
-	public ArrayList<Persona> getLista() {
+	public ArrayList<EstudianteVO> getLista() {
 		return listaPersonas;		
 	}
 	
-	public Persona obtenerEstudiante(String documento) {
-		Persona p = null;
-		for(Persona persona : listaPersonas) {
+	public EstudianteVO obtenerEstudiante(String documento) {
+		EstudianteVO p = null;
+		for(EstudianteVO persona : listaPersonas) {
 			if(persona.getDocumento().equals(documento)) {
 				p = persona;
 			}	
