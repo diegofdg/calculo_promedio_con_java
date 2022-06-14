@@ -1,11 +1,13 @@
-package procesos;
+package modelo.operaciones;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+
+import controlador.Coordinador;
 
 public class Procesos {
 	
 	ArrayList<Persona> listaPersonas;
+	private Coordinador miCoordinador;
 	
 	public Procesos() {
 		listaPersonas = new ArrayList<Persona>();
@@ -52,5 +54,9 @@ public class Procesos {
 			}	
 		}
 		return p;
+	}
+	
+	public void setCoordinador(Coordinador miCoordinador) {
+		this.miCoordinador = miCoordinador;		
 	}
 }

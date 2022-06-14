@@ -1,15 +1,13 @@
-package gui;
+package vista.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import procesos.Persona;
-import procesos.Procesos;
+import controlador.Coordinador;
+import modelo.operaciones.Persona;
 
 import javax.swing.AbstractButton;
 import javax.swing.JButton;
@@ -33,23 +31,21 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 	private JButton btnCalcular;
 	private JLabel lblResPromedio;
 	private JLabel lblResultado;
-	Procesos misProcesos;	
 	private JButton btnImprimirTotal;
 	private JLabel lblDoc;
 	private JTextField txtDocumento;
 	private JButton btnConsultarEstudiante;
 	private AbstractButton btnConsultarLista;
+	private Coordinador miCoordinador;
 	
 
 	public VentanaOperaciones() {
-		misProcesos = new Procesos();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
 		setSize(486, 531);
 		setLocationRelativeTo(null);
 		setResizable(false);
 		setTitle("CALCULO DE PROMEDIO");
-		iniciarComponentes();
-		
+		iniciarComponentes();		
 	}
 	
 	private void iniciarComponentes() {
@@ -127,7 +123,7 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 		panelPrincipal.add(lblResultado);
 		
 		btnCalcular = new JButton("Calcular");
-		btnCalcular.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnCalcular.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnCalcular.setBounds(310, 190, 117, 31);
 		btnCalcular.addActionListener(this);
 		panelPrincipal.add(btnCalcular);
@@ -168,23 +164,14 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 		if(e.getSource() == btnCalcular) {			
 			calcularPromedio();
 			
-		} else if(e.getSource() == btnImprimirTotal) {			
-			misProcesos.imprimirListaEstudiantes();
-			VentanaConsultaGeneral miConsultaGeneral = new VentanaConsultaGeneral();
-			miConsultaGeneral.setProcesos(misProcesos);
-			miConsultaGeneral.mostrarListaEnArea();
-			miConsultaGeneral.setVisible(true);
+		} else if(e.getSource() == btnImprimirTotal) {
+			miCoordinador.mostrarVentanaConsultaGeneral();
 			
 		} else if(e.getSource() == btnConsultarEstudiante) {
-			VentanaConsulta miVentanaConsulta = new VentanaConsulta();
-			miVentanaConsulta.asignarProcesos(misProcesos);
-			miVentanaConsulta.setVisible(true);
+			miCoordinador.mostrarVentanaConsulta();
 			
 		} else if (e.getSource()==btnConsultarLista) {
-			VentanaConsultaPersonas miVentanaConsultaPersonas = new VentanaConsultaPersonas();
-			miVentanaConsultaPersonas.setProcesos(misProcesos);
-			miVentanaConsultaPersonas.llenarTabla();
-			miVentanaConsultaPersonas.setVisible(true);			
+			miCoordinador.mostrarVentanaConsultaPersonas();
 		}
 	}
 
@@ -197,13 +184,13 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 			estudiante.setNota1(Double.parseDouble(txtNota1.getText()));
 			estudiante.setNota2(Double.parseDouble(txtNota2.getText()));
 			estudiante.setNota3(Double.parseDouble(txtNota3.getText()));			
-			estudiante.setPromedio(misProcesos.calcularPromedio(estudiante));
+			estudiante.setPromedio(miCoordinador.calcularPromedio(estudiante));
 			
 			lblResPromedio.setText(estudiante.getPromedio()+" ");
 			
-			String resultado = misProcesos.calcularDefinitiva(estudiante.getPromedio());
+			String resultado = miCoordinador.calcularDefinitiva(estudiante.getPromedio());
 			
-			misProcesos.registrarEnBD(estudiante);
+			miCoordinador.registrarEnBD(estudiante);
 			
 			if(resultado.equals("Aprobado")) {
 				lblResultado.setText("Resultado: "+resultado);
@@ -219,5 +206,9 @@ public class VentanaOperaciones extends JFrame implements ActionListener {
 		} catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Ocurre un error, verifique los datos", "ERROR", JOptionPane.ERROR_MESSAGE);
 		}				
+	}
+
+	public void setCoordinador(Coordinador miCoordinador) {
+		this.miCoordinador = miCoordinador;		
 	}
 }

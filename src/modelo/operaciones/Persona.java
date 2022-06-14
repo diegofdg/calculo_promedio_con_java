@@ -1,4 +1,4 @@
-package procesos;
+package modelo.operaciones;
 
 public class Persona {
 	private String documento;

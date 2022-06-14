@@ -1,8 +1,7 @@
-package gui;
+package vista.gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.util.ArrayList;
 
@@ -14,14 +13,14 @@ import javax.swing.JTextArea;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import procesos.Persona;
-import procesos.Procesos;
+import controlador.Coordinador;
+import modelo.operaciones.Persona;
 
 public class VentanaConsultaGeneral extends JFrame {
 
 	private JPanel panelPrincipal;
 	private JTextArea areaInformacion;
-	Procesos misProcesos;
+	private Coordinador miCoordinador;
 	
 	public VentanaConsultaGeneral() {
 		setSize(527, 337);
@@ -58,12 +57,8 @@ public class VentanaConsultaGeneral extends JFrame {
 		scroll.setViewportView(areaInformacion);
 	}
 
-	public void setProcesos(Procesos misProcesos) {
-		this.misProcesos = misProcesos;
-	}
-
 	public void mostrarListaEnArea() {
-		ArrayList<Persona> listaPersonas = misProcesos.getLista();
+		ArrayList<Persona> listaPersonas = miCoordinador.getLista();
 		String cadena = "INFORMACION PERSONAS\n";
 		
 		if(!listaPersonas.isEmpty()) {
@@ -77,5 +72,9 @@ public class VentanaConsultaGeneral extends JFrame {
 		} else {
 			areaInformacion.setText("NO SE HAN REGISTRADO ESTUDIANTES");
 		}		
+	}
+
+	public void setCoordinador(Coordinador miCoordinador) {
+		this.miCoordinador = miCoordinador;		
 	}
 }

@@ -1,4 +1,4 @@
-package gui;
+package vista.gui;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -14,8 +14,8 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
-import procesos.Persona;
-import procesos.Procesos;
+import controlador.Coordinador;
+import modelo.operaciones.Persona;
 
 public class VentanaConsulta extends JFrame implements ActionListener {
 	
@@ -29,10 +29,9 @@ public class VentanaConsulta extends JFrame implements ActionListener {
 	private JLabel lblResultado;
 	private JLabel lblDoc;
 	private JTextField txtDocumento;
-	private Procesos misProcesos;
+	private Coordinador miCoordinador;
 	
 	public VentanaConsulta() {
-		//setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(477, 379);
 		setLocationRelativeTo(null);
 		setResizable(false);
@@ -115,7 +114,7 @@ public class VentanaConsulta extends JFrame implements ActionListener {
 		panelPrincipal.add(lblResultado);
 		
 		btnConsultar = new JButton("Consultar");
-		btnConsultar.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		btnConsultar.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnConsultar.setBounds(310, 202, 117, 31);
 		btnConsultar.addActionListener(this);
 		panelPrincipal.add(btnConsultar);
@@ -136,7 +135,7 @@ public class VentanaConsulta extends JFrame implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == btnConsultar) {			
-			Persona miEstudiante = misProcesos.obtenerEstudiante(txtDocumento.getText());
+			Persona miEstudiante = miCoordinador.obtenerEstudiante(txtDocumento.getText());
 			if(miEstudiante != null) {
 				txtNombre.setText(miEstudiante.getNombre());
 				txtNota1.setText(miEstudiante.getNota1()+"");
@@ -148,7 +147,7 @@ public class VentanaConsulta extends JFrame implements ActionListener {
 		}		
 	}
 
-	public void asignarProcesos(Procesos misProcesos) {
-		this.misProcesos = misProcesos;		
+	public void setCoordinador(Coordinador miCoordinador) {
+		this.miCoordinador = miCoordinador;		
 	}
 }

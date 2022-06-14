@@ -1,8 +1,6 @@
-package gui;
+package vista.gui;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.util.ArrayList;
 
@@ -15,15 +13,15 @@ import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import procesos.Persona;
-import procesos.Procesos;
+import controlador.Coordinador;
+import modelo.operaciones.Persona;
 
 public class VentanaConsultaPersonas extends JFrame {
 
 	private JPanel panelPrincipal;
 	private JTable tablaEstudiantes;
-	Procesos misProcesos;
 	private DefaultTableModel model;
+	private Coordinador miCoordinador;
 
 	public VentanaConsultaPersonas() {
 		setSize(507, 343);
@@ -54,25 +52,13 @@ public class VentanaConsultaPersonas extends JFrame {
 		
 		tablaEstudiantes = new JTable();
 		
-		model = new DefaultTableModel();
-		tablaEstudiantes.setModel(model);
-		model.addColumn("Documento");
-		model.addColumn("Nombre");
-		model.addColumn("Nota 1");
-		model.addColumn("Nota 2");
-		model.addColumn("Nota 3");
-		model.addColumn("Promedio");
-		
 		scrollPane.setViewportView(tablaEstudiantes);		
 	}
 
-	public void setProcesos(Procesos misProcesos) {
-		this.misProcesos = misProcesos;
-		
-	}
-	
 	public void llenarTabla() {
-		ArrayList<Persona> listaPersonas = misProcesos.getLista();
+		ArrayList<Persona> listaPersonas = miCoordinador.getLista();
+		
+		crearModelo();
 		
 		for(Persona persona : listaPersonas) {
 			Object[] fila = new Object[6];
@@ -85,5 +71,20 @@ public class VentanaConsultaPersonas extends JFrame {
 			
 			model.addRow(fila);
 		}		
+	}
+	
+	private void crearModelo() {
+		model = new DefaultTableModel();
+		tablaEstudiantes.setModel(model);
+		model.addColumn("Documento");
+		model.addColumn("Nombre");
+		model.addColumn("Nota 1");
+		model.addColumn("Nota 2");
+		model.addColumn("Nota 3");
+		model.addColumn("Promedio");
+	}
+
+	public void setCoordinador(Coordinador miCoordinador) {
+		this.miCoordinador = miCoordinador;		
 	}
 }
